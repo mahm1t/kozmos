@@ -13,6 +13,16 @@ const ctx = canvas.getContext('2d');
 const menu = document.querySelector('#planets');
 const language = document.querySelector('#language');
 let strings = translations.tr;
+let view = 'orbit';
+const zoom = document.querySelector('#zoom');
+const viewButtons = ['orbit','close','aerial'].map(id => document.querySelector('#'+id));
+function setView(next) {
+  view = next;
+  viewButtons.forEach(button => button.setAttribute('aria-pressed', button.id === next));
+  zoom.disabled = next === 'orbit';
+  document.querySelector('#scale-note').textContent = next === 'orbit' ? strings[8] : explorationLabels[language.value][8];
+}
+viewButtons.forEach(button => { button.onclick = () => setView(button.id); });
 const motion = document.querySelector('#motion');
 let selected = 2, tilt = 0.55, yaw = 0, clock = 0, previous, drag, hits = [];
 let moving = !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,7 +35,7 @@ function select(index) {
 planets.forEach((planet, index) => {
   const button = document.createElement('button');
   button.type = 'button';
-  button.onclick = () => select(index);
+  button.onclick = () => { select(index); setView("close"); };
   menu.append(button);
 });
 function syncMotion() {
@@ -43,6 +53,14 @@ function applyLanguage(code) {
   canvas.setAttribute('aria-label', strings[1]);
   menu.setAttribute('aria-label', strings[1]);
   strings[9].split('|').forEach((name,index) => { menu.children[index].textContent = name; });
+  const copy = explorationLabels[code];
+  const ids = ['orbit','close','aerial',null,'enter','colony-heading','free','locked-one'];
+  ids.forEach((id,i) => { if (id) document.querySelector('#'+id).textContent = copy[i]; });
+  zoom.setAttribute('aria-label',copy[3]);
+  document.querySelector('#solar-enter').textContent = copy[4];
+  document.querySelector('#solar-title').textContent = strings[1];
+  document.querySelector('#locked-two').textContent = copy[7];
+  setView(view);
   select(selected);
   syncMotion();
 }
@@ -63,7 +81,7 @@ language.onchange = () => {
   try { localStorage.setItem('kozmos-language',language.value); } catch {}
 };
 motion.onclick = () => { moving = !moving; syncMotion(); };
-document.querySelector('#reset').onclick = () => { tilt = 0.55; yaw = 0; };
+document.querySelector('#reset').onclick = () => { tilt = 0.55; yaw = 0; zoom.value = 100; setView("orbit"); };
 canvas.onpointerdown = event => {
   drag = {x:event.clientX,y:event.clientY,tilt,yaw};
   canvas.setPointerCapture(event.pointerId);
@@ -75,10 +93,10 @@ canvas.onpointermove = event => {
 };
 canvas.onpointercancel = () => { drag = undefined; };
 canvas.onpointerup = event => {
-  if (drag && Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 5) {
+  if (view === "orbit" && drag && Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 5) {
     const rect = canvas.getBoundingClientRect();
     const hit = [...hits].reverse().find(({x,y,r}) => Math.hypot(event.clientX-rect.left-x,event.clientY-rect.top-y) < r+6);
-    if (hit) select(hit.index);
+    if (hit) { select(hit.index); setView("close"); }
   }
   drag = undefined;
 };
@@ -96,6 +114,11 @@ function render(now) {
   for (let i=0;i<180;i++) {
     ctx.fillStyle = i%7 === 0 ? '#8b9cca' : '#34405e';
     ctx.fillRect((i*151.29)%w,(i*i*17.17)%h,i%7 === 0 ? 2 : 1,1);
+  }
+  if (view !== 'orbit') {
+    drawPlanetDetail(ctx,w,h,selected,yaw+clock*.3,tilt-.55,Number(zoom.value)/100,view === 'aerial');
+    requestAnimationFrame(render);
+    return;
   }
   const unit = Math.min(w,h*1.4);
   function project(angle, radius) {
