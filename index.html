@@ -5,9 +5,70 @@
 *{box-sizing:border-box}body{margin:0;background:#070b18;color:#eef3ff;font:16px system-ui}header,main{max-width:1250px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;border-bottom:1px solid #29324d;letter-spacing:.16em;color:#aabaff}h1{font-size:clamp(2.3rem,6vw,5rem);margin:0;letter-spacing:-.06em}p{color:#c0c9df;line-height:1.55}.layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px}canvas,aside{border:1px solid #29324d;border-radius:18px;background:#0c1224}canvas{width:100%;height:clamp(310px,55vh,580px);display:block;touch-action:none;cursor:grab}aside{padding:22px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}select,button{background:#141c33;color:#eef3ff;border:1px solid #40527b;border-radius:9px;padding:9px 13px;cursor:pointer}button[aria-pressed=true]{background:#bfd0ff;color:#101832}small{color:#aabaff}@media(max-width:720px){.layout{grid-template-columns:1fr}header,main{padding:16px}}
 header{align-items:center}header strong{color:#f1f6ff;font-weight:850}.hero{padding:clamp(28px,7vw,85px) 0 28px;background:radial-gradient(ellipse at 75% 30%,#202e54,transparent 64%)}h1{max-width:16ch}.controls{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.controls input{max-width:110px;accent-color:#aec6ff}.colonies{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:12px}.colonies article{border:1px solid #293653;border-radius:16px;padding:20px;background:radial-gradient(ellipse at 95% 0,#293450,#10162a 65%)}.colonies h3{margin:8px 0}.colonies small{color:#e8c18a}.colonies article:first-child small{color:#a9e1c7}.entry{display:inline-block;color:#fff;background:#273e69;border:1px solid #5375ac;border-radius:9px;padding:9px 13px;text-decoration:none}#explore{scroll-margin-top:15px}
 .hero{min-height:clamp(460px,67vh,680px);padding:clamp(35px,10vw,120px) 5%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;border:1px solid #30394d;border-radius:24px;margin-bottom:28px;background:linear-gradient(90deg,#050810 8%,#050810bd 42%,#05081022 80%),url(https://science.nasa.gov/wp-content/uploads/2024/03/jupiter-marble-pia22946-16x9-1.jpg) right center/cover}.hero h1{max-width:12ch;color:white;text-shadow:0 3px 30px #000}.hero p{max-width:39ch;color:#e0e7f8}.hero .entry{background:#ecf2ff;color:#10182d;font-weight:700;border:0;padding:13px 19px}.hero-credit{margin-top:18px;font-size:.75rem;color:#d3def3}.viewer{min-width:0}.viewer [hidden]{display:none!important}.atlas{background:#03050a;border:1px solid #30394d;border-radius:18px;overflow:hidden;margin:0}.atlas-image{height:clamp(320px,55vh,610px);overflow:hidden;display:grid;place-items:center}.atlas-image img{display:block;width:100%;height:100%;min-height:0;min-width:0;object-fit:contain;transform-origin:var(--x,50%) var(--y,50%);cursor:crosshair}.atlas figcaption{padding:12px 16px;color:#c3cee2;font-size:.85rem}.atlas a{color:#c4daff}.cutaway{width:min(76%,360px);aspect-ratio:1;border-radius:50%;box-shadow:0 0 60px #7aafff22}.layout{grid-template-columns:minmax(0,1fr) 260px}@media(max-width:720px){.layout{grid-template-columns:1fr}.hero{background-position:60% center}}
+.premium{margin:44px 0 20px}.premium-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:14px}.premium-grid details{overflow:hidden;border:1px solid #354566;border-radius:16px;background:#10182a}.premium-grid summary{position:relative;min-height:158px;display:flex;flex-direction:column;justify-content:end;gap:6px;padding:18px;cursor:pointer;isolation:isolate;font-size:1.16rem;font-weight:750;background:linear-gradient(0deg,#10182a 8%,#10182a44 90%),var(--art)}.premium-grid summary::after{content:'+';position:absolute;inset-inline-end:15px;top:13px;border:1px solid #a5bfe966;border-radius:50%;width:25px;height:25px;text-align:center}.premium-grid details[open] summary::after{content:'−'}.premium-grid small{color:#f0c995;font-size:.72rem}.premium-grid p,.premium-grid a{margin:0 18px 16px}.premium-grid a{display:inline-block;color:#c9dbff}.premium-grid p{font-size:.92rem}.premium header{display:block;margin:0 0 15px;padding:0;border:0;letter-spacing:normal}.premium h2{font-size:clamp(1.65rem,4vw,2.6rem);color:#eef3ff;margin:0}.premium header p{margin:5px 0 0}
 </style>
 <header><strong>KOZMOS</strong><select id="language" aria-label="Dil / Language"></select></header>
 <main><section class="hero"><h1 id="heading">Yörüngeleri keşfet.</h1><p id="instructions">Sahneyi döndürmek için sürükle. Bir gezegen seçerek ayrıntılarını gör.</p>
 <a class="entry" id="enter" href="#explore"></a><a class="hero-credit" href="https://science.nasa.gov/photojournal/jupiter-marble/">JunoCam · Kevin M. Gill (CC BY) / NASA / JPL-Caltech / SwRI / MSSS</a></section><section id="explore"><div class="controls"><button id="orbit" type="button"></button><button id="close" type="button"></button><button id="aerial" type="button"></button><button id="interior" type="button"></button><button id="rings" type="button" hidden></button><input id="zoom" type="range" min="100" max="250" step="5" value="100"></div><div class="layout"><div class="viewer"><canvas aria-label="Güneş sistemi yörüngelerinin üç boyutlu görünümü"></canvas><figure class="atlas" id="atlas" hidden><div class="atlas-image"><img id="mission-image" alt=""><div id="cutaway" class="cutaway" hidden role="img"></div></div><figcaption><span id="mission-credit"></span> <a id="mission-source" target="_blank" rel="noopener">NASA ↗</a><span id="mission-status" role="status"></span></figcaption></figure></div><aside aria-live="polite"><small id="selected-label">SEÇİLİ GEZEGEN</small><h2 id="name"></h2><p id="info"></p></aside></div>
-<nav id="planets" aria-label="Gezegenler"></nav><button id="motion" type="button">Hareketi durdur</button> <button id="reset" type="button">Görünümü sıfırla</button><p><small id="scale-note">Gezegen boyutları, mesafeler ve hareket hızları keşif için stilize edilmiştir.</small></p></section><section><h2 id="colony-heading"></h2><div class="colonies"><article><small id="free"></small><h3 id="solar-title"></h3><a class="entry" id="solar-enter" href="#explore"></a></article><article><small>Premium</small><h3>Proxima b</h3><p id="locked-one"></p></article><article><small>Premium</small><h3>TRAPPIST-1 e</h3><p id="locked-two"></p></article></div></section></main>
-<script src="languages.js"></script><script src="exploration.js"></script><script src="scene.js?v=3"></script><script src="atlas.js?v=2"></script></html>
+<nav id="planets" aria-label="Gezegenler"></nav><button id="motion" type="button">Hareketi durdur</button> <button id="reset" type="button">Görünümü sıfırla</button><p><small id="scale-note">Gezegen boyutları, mesafeler ve hareket hızları keşif için stilize edilmiştir.</small></p></section><section><h2 id="colony-heading"></h2><div class="colonies"><article><small id="free"></small><h3 id="solar-title"></h3><a class="entry" id="solar-enter" href="#explore"></a></article><article><small>Premium</small><h3>Proxima b</h3><p id="locked-one"></p></article><article><small>Premium</small><h3>TRAPPIST-1 e</h3><p id="locked-two"></p></article></div></section><section id="premium" class="premium" aria-labelledby="premium-heading"><header><h2 id="premium-heading">Premium keşifler</h2><p id="premium-status">Önizleme · Üye erişimi hazırlık aşamasında.</p></header><div class="premium-grid" id="premium-grid"></div></section></main>
+<script src="languages.js"></script><script src="exploration.js"></script><script src="scene.js?v=3"></script><script src="atlas.js?v=2"></script><script>
+const premiumEntries = [
+  {art:'linear-gradient(145deg,#233a70,#3b2564,#0b132c)',url:'https://svs.gsfc.nasa.gov/4851/',
+   tr:['Yıldız rotaları','Katalog verisi','Güneş Sistemi’nden Proxima Centauri yönüne uzanan keşif rotası için yıldız haritasını incele.'],
+   en:['Stellar routes','Catalog data','Explore the star map behind a route from the Solar System toward Proxima Centauri.']},
+  {art:'radial-gradient(ellipse at 60% 10%,#111421 15%,#d68a67 21%,#633a70 37%,#111526 65%)',url:'https://svs.gsfc.nasa.gov/14576/',
+   tr:['Kara delikler','Bilimsel simülasyon','Olay ufkuna yaklaşırken ışığın neden büküldüğünü ve yığılma diskinin nasıl göründüğünü keşfet.'],
+   en:['Black holes','Scientific simulation','See how light bends near the event horizon and how an accretion disk can appear.']},
+  {art:'radial-gradient(ellipse at 60% 20%,#111231 12%,#4941a5 26%,#247a91 38%,#111526 70%)',url:'https://science.nasa.gov/universe/black-holes/',
+   tr:['Solucan delikleri','Kuramsal tasvir','Uzayzamanın uzak bölgelerini birleştirebilecek varsayımsal bir geçidin fikrini incele.'],
+   en:['Wormholes','Theoretical concept','Explore the idea of a hypothetical passage connecting distant regions of spacetime.']},
+  {art:'radial-gradient(ellipse at 70% 4%,#b69b77,#61467e 28%,#171e4b 59%,#111526)',url:'https://science.nasa.gov/asset/hubble/hubble-m31-phat-mosaic/',
+   tr:['Galaksiler','Teleskop gözlemi','Andromeda’nın yıldız kümelerini ve toz şeritlerini Hubble mozaiğinde incele.'],
+   en:['Galaxies','Telescope observation','Explore Andromeda’s star clusters and dust lanes in a Hubble mosaic.']}
+];
+const premiumLabels = {
+ tr:['Premium keşifler','Önizleme · Üye erişimi hazırlık aşamasında.','Yıldız rotaları','Kara delikler','Solucan delikleri','Galaksiler'],
+ en:['Premium exploration','Preview · Member access is in development.','Stellar routes','Black holes','Wormholes','Galaxies'],
+ de:['Premium-Entdeckungen','Vorschau · Mitgliederzugang in Entwicklung.','Sternrouten','Schwarze Löcher','Wurmlöcher','Galaxien'],
+ es:['Exploración Premium','Vista previa · Acceso para miembros en desarrollo.','Rutas estelares','Agujeros negros','Agujeros de gusano','Galaxias'],
+ fr:['Exploration Premium','Aperçu · Accès membre en préparation.','Routes stellaires','Trous noirs','Trous de ver','Galaxies'],
+ pt:['Exploração Premium','Prévia · Acesso de membros em desenvolvimento.','Rotas estelares','Buracos negros','Buracos de minhoca','Galáxias'],
+ ar:['استكشاف بريميوم','معاينة · وصول الأعضاء قيد التطوير.','مسارات النجوم','الثقوب السوداء','الثقوب الدودية','المجرات'],
+ zh:['高级探索','预览 · 会员访问功能正在开发。','恒星航线','黑洞','虫洞','星系'],
+ ja:['プレミアム探索','プレビュー · メンバー向け機能は開発中です。','恒星への航路','ブラックホール','ワームホール','銀河'],
+ ru:['Премиум-исследования','Предпросмотр · Доступ для участников в разработке.','Звёздные маршруты','Чёрные дыры','Кротовые норы','Галактики']
+};
+const cards = premiumEntries.map(entry => {
+  const card = document.createElement('details');
+  const summary = document.createElement('summary');
+  const category = document.createElement('small');
+  const title = document.createElement('span');
+  const description = document.createElement('p');
+  const sourceLink = document.createElement('a');
+  summary.style.setProperty('--art', entry.art);
+  summary.append(category,title);
+  sourceLink.href = entry.url;
+  sourceLink.target = '_blank';
+  sourceLink.rel = 'noopener';
+  sourceLink.textContent = 'NASA ↗';
+  card.append(summary,description,sourceLink);
+  document.querySelector('#premium-grid').append(card);
+  return {category,title,description};
+});
+function updatePremium() {
+  const code = document.documentElement.lang;
+  const labels = premiumLabels[code] || premiumLabels.en;
+  document.querySelector('#premium-heading').textContent = labels[0];
+  document.querySelector('#premium-status').textContent = labels[1];
+  cards.forEach(({category,title,description},index) => {
+    const copy = premiumEntries[index][code] || premiumEntries[index].en;
+    category.textContent = 'Premium · ' + copy[1];
+    title.textContent = labels[2+index];
+    description.textContent = copy[2];
+    description.lang = code === 'tr' ? 'tr' : 'en';
+  });
+}
+document.querySelector('#language').addEventListener('change',updatePremium);
+updatePremium();
+</script>
+</html>
