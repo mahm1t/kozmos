@@ -103,6 +103,10 @@ canvas.onpointerup = event => {
 function render(now) {
   if (moving && previous !== undefined) clock += Math.min(now - previous, 50) / 1000;
   previous = now;
+  if (canvas.hidden) {
+    requestAnimationFrame(render);
+    return;
+  }
   const w = canvas.clientWidth, h = canvas.clientHeight, dpr = Math.min(devicePixelRatio, 2);
   if (canvas.width !== Math.round(w*dpr) || canvas.height !== Math.round(h*dpr)) {
     canvas.width = Math.round(w*dpr);
